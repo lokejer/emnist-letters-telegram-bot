@@ -1,9 +1,10 @@
 # emnist/letters classifier bot
 
-A Telegram bot that classifies handwritten letters using a previous assignment's CNN on the EMNIST/letters dataset, via:
+Telegram bot that classifies handwritten letters using a previous assignment's CNN trained on ~88000 rows of images from the EMNIST/letters dataset.
 
-- **Direct photo** — send a photo to the bot and it replies with the predicted letter and confidence (e.g. *Predicted letter: Z (confidence: 99.9%)*)
-- **Inline query** — in any chat, type `@botname https://image-url.png` to classify a hosted image without leaving the conversation
+classify your image via 2 modes:
+- **direct photo** — send a photo directly to the bot and it replies with the predicted letter and confidence (e.g. *Predicted letter: Z (confidence: 99.9%)*)
+- **inline query** — in any chat, type `@botname https://image-url.png` to classify a hosted image without leaving the conversation
 
 ## Workflow
 
@@ -15,7 +16,7 @@ A Telegram bot that classifies handwritten letters using a previous assignment's
 
 ### classify
 
-a tuned Keras CNN is loaded from a saved `.h5` model file (see how i trained it [here](https://github.com/lokejer/emnist-letters). The network outputs a softmax probability distribution across 26 classes (A–Z), returning the class with the highest probability, along with its confidence score.
+a tuned Keras CNN is loaded from a saved `.h5` model file (see how i trained it [here](https://github.com/lokejer/emnist-letters)). The network outputs a softmax probability distribution across 26 classes (A–Z), returning the class with the highest probability, along with its confidence score.
 
 the CNN architecture includes `Conv2D`, `MaxPooling2D`, `BatchNormalization`, and `Dropout` layers, trained on the EMNIST Letters dataset (~145,000 handwritten letter samples).
 
@@ -25,7 +26,7 @@ the bot formats the result and sends it back to the user via the Telegram Bot AP
 
 ## Tech Stack
 
-| Component | Technology |
+| component | technology |
 |---|---|
 | bot framework | `python-telegram-bot` (async, v20+) |
 | ML framework | TensorFlow / Keras |
@@ -33,7 +34,7 @@ the bot formats the result and sends it back to the user via the Telegram Bot AP
 | http client | httpx (async, for inline URL fetching) |
 | config | python-dotenv |
 
-## Running Locally
+## Run It Locally
 
 ```bash
 pip install -r requirements.txt
