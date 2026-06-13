@@ -1,53 +1,37 @@
-# EMNIST Letter Classifier Bot
+# emnist/letters classifier bot
 
-A Telegram bot that identifies handwritten letters using a convolutional neural network (CNN) trained on the EMNIST dataset. Send it a photo of a handwritten letter and it tells you what letter it thinks it is, along with a confidence score.
+A Telegram bot that classifies handwritten letters using a previous assignment's CNN on the EMNIST/letters dataset, via:
 
-## What It Does
-
-- **Direct photo** — send a photo to the bot and it replies with the predicted letter and confidence (e.g. *Predicted letter: A (confidence: 87.3%)*)
+- **Direct photo** — send a photo to the bot and it replies with the predicted letter and confidence (e.g. *Predicted letter: Z (confidence: 99.9%)*)
 - **Inline query** — in any chat, type `@botname https://image-url.png` to classify a hosted image without leaving the conversation
 
-## How It Works
+## Workflow
 
-### 1. Image Preprocessing
+### preprocess image
 
-When the bot receives a photo, it runs it through a preprocessing pipeline before feeding it to the model:
+- convert image to grayscale and resize it to **28×28px**
+- normalise pixel values from 0–255 to 0–1
+- auto-invert white-background images (training dataset uses black-background images)
 
-- Converts the image to **grayscale** and resizes it to **28×28 pixels** — the exact dimensions the model was trained on
-- **Normalises** pixel values from 0–255 to 0–1
-- **Auto-inverts** the image if needed — the EMNIST dataset uses white letters on a black background, but real photos are typically the opposite
+### classify
 
-### 2. Classification
+a tuned Keras CNN is loaded from a saved `.h5` model file (see how i trained it [here](https://github.com/lokejer/emnist-letters). The network outputs a softmax probability distribution across 26 classes (A–Z), returning the class with the highest probability, along with its confidence score.
 
-The preprocessed image is passed to a Keras CNN loaded from a saved `.h5` model file. The network outputs a **softmax probability distribution** across 26 classes (A–Z). The class with the highest probability is returned as the prediction, along with its confidence score.
+the CNN architecture includes `Conv2D`, `MaxPooling2D`, `BatchNormalization`, and `Dropout` layers, trained on the EMNIST Letters dataset (~145,000 handwritten letter samples).
 
-The CNN architecture includes `Conv2D`, `MaxPooling2D`, `BatchNormalization`, and `Dropout` layers, trained on the EMNIST Letters dataset (~145,000 handwritten letter samples).
+### response
 
-### 3. Response
-
-The bot formats the result and sends it back to the user via the Telegram Bot API.
+the bot formats the result and sends it back to the user via the Telegram Bot API.
 
 ## Tech Stack
 
 | Component | Technology |
 |---|---|
-| Bot framework | `python-telegram-bot` (async, v20+) |
+| bot framework | `python-telegram-bot` (async, v20+) |
 | ML framework | TensorFlow / Keras |
-| Image processing | Pillow, NumPy |
-| HTTP client | httpx (async, for inline URL fetching) |
-| Config | python-dotenv |
-
-## Project Structure
-
-```
-cnn-bot/
-├── bot.py            # Telegram handlers and entry point
-├── classifier.py     # Model loading, preprocessing, inference
-├── models/
-│   └── best_tuned_model.h5   # Trained Keras CNN
-├── requirements.txt
-└── .env              # TELEGRAM_API_TOKEN
-```
+| image processing | Pillow, numpy |
+| http client | httpx (async, for inline URL fetching) |
+| config | python-dotenv |
 
 ## Running Locally
 
@@ -56,7 +40,7 @@ pip install -r requirements.txt
 python bot.py
 ```
 
-Requires a `.env` file with your Telegram bot token:
+requires a `.env` file with your Telegram bot token:
 ```
 TELEGRAM_API_TOKEN=your_token_here
 ```
