@@ -16,7 +16,7 @@ classify your image via 2 modes:
 
 ### classify
 
-a tuned Keras CNN is loaded from a saved `.h5` model file (see how i trained it [here]([https://github.com/lokejer/emnist-letters/partA.ipynb](https://github.com/lokejer/emnist-letters/blob/main/partA.ipynb)). The network outputs a softmax probability distribution across 26 classes (A–Z), returning the class with the highest probability, along with its confidence score.
+a tuned Keras CNN is loaded from a saved `.h5` model file (see how i trained it [here](https://github.com/lokejer/emnist-letters/blob/main/partA.ipynb)). The network outputs a softmax probability distribution across 26 classes (A–Z), returning the class with the highest probability, along with its confidence score.
 
 the CNN includes `Conv2D`, `MaxPooling2D`, `BatchNormalization`, and `Dropout` layers, with state-of-the-art "block"-style architecture.
 
